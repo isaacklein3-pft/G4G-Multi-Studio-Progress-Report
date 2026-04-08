@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Studio November Activation: Progress Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap');
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #161616;
+    --border: #2a2a2a;
+    --accent: #e8e8e8;
+    --dim: #888;
+    --green: #4ade80;
+    --yellow: #fbbf24;
+    --red: #f87171;
+    --blue: #60a5fa;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--accent);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 32px;
+    margin-bottom: 40px;
+  }
+
+  .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .meta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+  .meta span { margin-right: 24px; }
+
+  h2 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  section { margin-bottom: 48px; }
+
+  /* Status table */
+  .status-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .status-table th {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .status-table td {
+    padding: 12px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .status-table tr:last-child td { border-bottom: none; }
+
+  .studio-label {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  .studio-desc {
+    font-size: 11px;
+    color: var(--dim);
+    margin-top: 2px;
+  }
+
+  .phase-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+
+  .phase-contracting { background: rgba(251,191,36,0.15); color: var(--yellow); border: 1px solid rgba(251,191,36,0.3); }
+  .phase-scoping { background: rgba(96,165,250,0.12); color: var(--blue); border: 1px solid rgba(96,165,250,0.3); }
+  .phase-confirmed { background: rgba(74,222,128,0.12); color: var(--green); border: 1px solid rgba(74,222,128,0.3); }
+
+  .conf-high { color: var(--green); font-weight: 600; }
+  .conf-med { color: var(--yellow); font-weight: 600; }
+  .conf-low { color: var(--red); font-weight: 600; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 28px; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .milestone {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .milestone::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    border: 1px solid var(--dim);
+  }
+
+  .milestone.active::before { background: var(--yellow); border-color: var(--yellow); }
+  .milestone.complete::before { background: var(--green); border-color: var(--green); }
+  .milestone.critical::before { background: var(--red); border-color: var(--red); }
+
+  .m-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dim);
+    margin-bottom: 2px;
+  }
+
+  .m-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .m-desc { font-size: 12px; color: var(--dim); }
+
+  .dep-note {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--blue);
+    background: rgba(96,165,250,0.08);
+    border: 1px solid rgba(96,165,250,0.2);
+    padding: 2px 6px;
+    border-radius: 2px;
+    margin-top: 4px;
+  }
+
+  /* Blocker register */
+  .blocker {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border);
+    padding: 16px;
+    margin-bottom: 12px;
+    border-radius: 2px;
+  }
+
+  .blocker.sev-high { border-left-color: var(--red); }
+  .blocker.sev-med { border-left-color: var(--yellow); }
+  .blocker.sev-low { border-left-color: var(--blue); }
+
+  .blocker-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .blocker-id {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dim);
+  }
+
+  .blocker-title { font-weight: 600; font-size: 13px; }
+
+  .sev-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+
+  .sev-high { background: rgba(248,113,113,0.15); color: var(--red); }
+  .sev-med { background: rgba(251,191,36,0.15); color: var(--yellow); }
+  .sev-low { background: rgba(96,165,250,0.12); color: var(--blue); }
+
+  .blocker-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 24px;
+    font-size: 12px;
+    margin-top: 8px;
+  }
+
+  .blocker-field { color: var(--dim); }
+  .blocker-val { color: var(--accent); }
+
+  /* Scorecard */
+  .scorecard { width: 100%; border-collapse: collapse; }
+
+  .scorecard th {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .scorecard td {
+    padding: 12px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    vertical-align: top;
+  }
+
+  .scorecard tr:last-child td { border-bottom: none; }
+
+  .score-bar-wrap { display: flex; align-items: center; gap: 10px; }
+
+  .score-bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    width: 120px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .score-fill { height: 100%; border-radius: 3px; }
+  .fill-green { background: var(--green); }
+  .fill-yellow { background: var(--yellow); }
+  .fill-red { background: var(--red); }
+
+  .score-num { font-family: var(--mono); font-size: 12px; font-weight: 600; }
+
+  .threshold {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dim);
+  }
+
+  .go { color: var(--green); font-weight: 600; }
+  .nogo { color: var(--red); font-weight: 600; }
+  .watch { color: var(--yellow); font-weight: 600; }
+
+  /* Handoff tasks */
+  .handoff-task {
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 12px;
+    border-radius: 2px;
+  }
+
+  .task-id {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--dim);
+    margin-bottom: 6px;
+  }
+
+  .task-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .task-desc { font-size: 13px; color: #aaa; margin-bottom: 12px; }
+
+  .task-inputs-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .task-input-item {
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 3px;
+    padding-left: 12px;
+    position: relative;
+  }
+
+  .task-input-item::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--dim);
+  }
+
+  .task-output {
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--blue);
+    background: rgba(96,165,250,0.06);
+    border: 1px solid rgba(96,165,250,0.15);
+    padding: 6px 10px;
+    border-radius: 2px;
+  }
+
+  /* Misc */
+  .framework-note {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    border-radius: 2px;
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 40px;
+  }
+
+  .framework-note strong { color: var(--accent); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+
+  @media (max-width: 700px) {
+    .two-col { grid-template-columns: 1fr; }
+    body { padding: 24px 16px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="label">Post Fiat Network · Downstream Adoption Evidence</div>
+  <h1>Multi-Studio November Activation<br>Progress Report</h1>
+  <div class="meta">
+    <span>Report Date: April 7, 2026</span>
+    <span>Campaign Window: November 2026</span>
+    <span>Status: Active Coordination</span>
+  </div>
+</div>
+
+<div class="framework-note">
+  <strong>Framework reference:</strong> This report updates live status against the multi-studio Gaming for Good coordination framework established Q1 2026, which defined the partnership pipeline, activation taxonomy, revenue flow categories per SOW-001, and canonical studio anonymization labels. This document does not restate that framework. It records what has moved since framework completion, what is blocked, and what must happen next. Three studio activations are treated as signed for network reporting purposes based on written or in-person confirmation of participation scope.
+</div>
+
+<!-- SECTION 1: STATUS TABLE -->
+<section>
+  <h2>1 — Activation Status</h2>
+  <table class="status-table">
+    <thead>
+      <tr>
+        <th>Studio</th>
+        <th>Phase</th>
+        <th>Confidence</th>
+        <th>Last Verified Movement</th>
+        <th>Next Decision Gate</th>
+        <th>Owner Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="studio-label">Studio A</div>
+          <div class="studio-desc">Mobile — multi-title, global IP, 3-activation written confirmation</div>
+        </td>
+        <td><span class="phase-badge phase-contracting">Contracting</span></td>
+        <td><span class="conf-high">HIGH (92%)</span></td>
+        <td>
+          <div>Written 3-activation confirmation received</div>
+          <div class="meta" style="margin-top:4px">Last movement: March 31, 2026</div>
+        </td>
+        <td>MSA + SOW execution. Revenue split language and brand approval process to be finalized. Target: April 30, 2026.</td>
+        <td>Partnership Lead (FTR) + St. Jude Legal</td>
+      </tr>
+      <tr>
+        <td>
+          <div class="studio-label">Studio B</div>
+          <div class="studio-desc">VR — top-5 platform by ratings, confirmed IRL at GDC, detailed scope agreed</div>
+        </td>
+        <td><span class="phase-badge phase-contracting">Contracting</span></td>
+        <td><span class="conf-high">HIGH (88%)</span></td>
+        <td>
+          <div>In-person commitment at GDC. Activation scope (bundle, IRL plushies, patient art / community contest) agreed in follow-up call</div>
+          <div class="meta" style="margin-top:4px">Last movement: April 4, 2026</div>
+        </td>
+        <td>LOI execution. Meta platform policy review for web bundle option. Target: April 28, 2026.</td>
+        <td>Partnership Lead (FTR) + Studio B Technical Lead</td>
+      </tr>
+      <tr>
+        <td>
+          <div class="studio-label">Studio C</div>
+          <div class="studio-desc">Roblox — 957M+ lifetime visits, 10K+ CCU, revenue split in active negotiation</div>
+        </td>
+        <td><span class="phase-badge phase-scoping">Scoping</span></td>
+        <td><span class="conf-med">MED (74%)</span></td>
+        <td>
+          <div>Confirmed participation and community event format. Revenue split structure under negotiation</div>
+          <div class="meta" style="margin-top:4px">Last movement: March 28, 2026</div>
+        </td>
+        <td>Revenue split agreement. Roblox platform compliance review for charity revenue flow. Target: May 15, 2026.</td>
+        <td>Partnership Lead (FTR) + St. Jude Finance</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- SECTION 2: WORKBACK TIMELINE -->
+<section>
+  <h2>2 — Workback Timeline: April 7 → November 30, 2026</h2>
+  <div class="timeline">
+
+    <div class="milestone active">
+      <div class="m-date">April 7–28, 2026</div>
+      <div class="m-title">M1 — LOI Execution (All Three Studios)</div>
+      <div class="m-desc">Finalize and execute Letters of Intent for Studio A, B, and C. Studio A requires MSA incorporation. Studio B requires Meta platform policy review on web bundle structure before LOI can be finalized. Studio C requires revenue split agreement as a prerequisite.</div>
+      <div class="dep-note">DEP: Studio B LOI blocked until Meta web bundle policy confirmed</div>
+    </div>
+
+    <div class="milestone">
+      <div class="m-date">May 1–15, 2026</div>
+      <div class="m-title">M2 — Revenue Split and Platform Compliance Finalized</div>
+      <div class="m-desc">Studio C revenue split agreed and documented. Roblox platform compliance for charity revenue flow confirmed. Studio B web bundle vs. in-app decision locked. All three studios have executed or near-final commercial terms.</div>
+      <div class="dep-note">DEP: Studio C formal agreement cannot proceed until revenue split is resolved</div>
+    </div>
+
+    <div class="milestone">
+      <div class="m-date">May 16 – June 15, 2026</div>
+      <div class="m-title">M3 — Integration Specifications Delivered</div>
+      <div class="m-desc">Technical integration specs delivered to each studio covering: donation flow architecture, in-game item metadata, asset delivery format, and St. Jude brand guidelines. Studio B gadget design brief (patient art sourcing protocol) submitted to St. Jude for approval.</div>
+    </div>
+
+    <div class="milestone">
+      <div class="m-date">June 16 – July 15, 2026</div>
+      <div class="m-title">M4 — Creative Asset Production</div>
+      <div class="m-desc">All three studios begin production of campaign creative: Studio A produces in-game offer assets and social creative; Studio B builds gadget items from patient art and begins bundle configuration; Studio C builds in-experience event scaffolding. Community contest brief finalized for Studio B.</div>
+    </div>
+
+    <div class="milestone critical">
+      <div class="m-date">October 1, 2026</div>
+      <div class="m-title">M5 — All Creative Assets Submitted to St. Jude (Hard Deadline)</div>
+      <div class="m-desc">SOW-001 Section 4 requires asset submission minimum 10 business days before deployment (approval clock: 7 business days). With November 1 target launch, October 1 is the hard submission deadline for all studios. Any studio missing this gate risks launch delay or exclusion from November window.</div>
+      <div class="dep-note">DEP: All three studios blocked from launch if asset approval not received by Oct 15</div>
+    </div>
+
+    <div class="milestone">
+      <div class="m-date">October 1–15, 2026</div>
+      <div class="m-title">M6 — St. Jude Brand Approval Window</div>
+      <div class="m-desc">St. Jude reviews all submitted assets. SOW-001 provides 7 business days for written approval, revision request, or rejection. Parallel review across all three studio submissions. Any rejection triggers revision cycle; studios must re-submit with sufficient lead time before November 1.</div>
+    </div>
+
+    <div class="milestone">
+      <div class="m-date">October 16–31, 2026</div>
+      <div class="m-title">M7 — Technical Integration and Soft Launch Testing</div>
+      <div class="m-desc">Donation flow endpoints verified live. In-game items tested in staging. Studio B bundle pricing confirmed (in-app at $10.99–$14.99 or web bundle). Revenue tracking configured for post-campaign reporting. Studio C community event mechanics tested on Roblox sandbox.</div>
+    </div>
+
+    <div class="milestone critical">
+      <div class="m-date">November 1, 2026</div>
+      <div class="m-title">M8 — Campaign Live Across All Three Studios</div>
+      <div class="m-desc">Studio A in-game offer goes live (AB2 title). Studio B bundle available in-platform and/or via web store; community contest open. Studio C community event active in-experience. All donation links surfaced. All partner social channels activated per plan.</div>
+    </div>
+
+    <div class="milestone">
+      <div class="m-date">November 12, 2026</div>
+      <div class="m-title">M9 — Studio B IRL Activation (Plushie Distribution)</div>
+      <div class="m-desc">Studio B plushie drop: influencer boxes shipped, hospital distribution initiated. Influencer unboxing content published. Milestone is internal to Studio B activation but timed for mid-campaign amplification across the full campaign.</div>
+    </div>
+
+    <div class="milestone">
+      <div class="m-date">November 30, 2026</div>
+      <div class="m-title">M10 — Campaign Closes</div>
+      <div class="m-desc">All in-game offers and limited-time items deactivated per agreed windows. Donation links remain active for 15-day reconciliation period. Studio B 60-day item availability window tracked separately from campaign close.</div>
+    </div>
+
+    <div class="milestone">
+      <div class="m-date">December 30, 2026</div>
+      <div class="m-title">M11 — Post-Campaign Revenue Report Due (SOW-001)</div>
+      <div class="m-desc">SOW-001 Section 3 requires comprehensive revenue report within 30 days of campaign close: per-partner breakdown by activation format, platform fee deductions, FTR 12.5% commission calculation, and net donation revenue due to St. Jude. Remittance due 15 days after St. Jude acceptance.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION 3: BLOCKER REGISTER -->
+<section>
+  <h2>3 — Blocker Register</h2>
+
+  <div class="blocker sev-high">
+    <div class="blocker-header">
+      <span class="blocker-id">BLK-01</span>
+      <span class="blocker-title">Studio B Web Bundle — Meta Platform Policy Unresolved</span>
+      <span class="sev-badge sev-high">HIGH</span>
+    </div>
+    <div class="m-desc">Studio B is exploring a web bundle option to bypass Meta's ~30% platform cut. This is commercially significant (material difference in net donation revenue) but requires explicit confirmation that direct web sales of items linked to Meta platform use are permitted under Meta's developer policies. LOI cannot be finalized until this is resolved.</div>
+    <div class="blocker-grid">
+      <div><span class="blocker-field">Response Deadline:</span></div>
+      <div><span class="blocker-val">April 21, 2026 (M1 gate at risk)</span></div>
+      <div><span class="blocker-field">Escalation Trigger:</span></div>
+      <div><span class="blocker-val">No written policy confirmation from Meta by April 21. Escalate to St. Jude legal for fallback structure (in-app only at full platform cut).</span></div>
+      <div><span class="blocker-field">Next Action:</span></div>
+      <div><span class="blocker-val">Studio B legal team submits Meta policy inquiry. FTR follows up April 14.</span></div>
+    </div>
+  </div>
+
+  <div class="blocker sev-high">
+    <div class="blocker-header">
+      <span class="blocker-id">BLK-02</span>
+      <span class="blocker-title">Studio C Revenue Split — No Agreement Reached</span>
+      <span class="sev-badge sev-high">HIGH</span>
+    </div>
+    <div class="m-desc">Studio C (Roblox) has confirmed participation and format but revenue split percentage is unresolved. Without a signed split structure, formal agreement cannot proceed and the studio cannot be treated as contracted. Risk of walk-away increases if negotiation stalls past May.</div>
+    <div class="blocker-grid">
+      <div><span class="blocker-field">Response Deadline:</span></div>
+      <div><span class="blocker-val">May 1, 2026</span></div>
+      <div><span class="blocker-field">Escalation Trigger:</span></div>
+      <div><span class="blocker-val">No revenue split term sheet by May 1. Escalate to St. Jude VP of Partnerships to authorize minimum acceptable split floor.</span></div>
+      <div><span class="blocker-field">Next Action:</span></div>
+      <div><span class="blocker-val">FTR presents proposed split structure to Studio C by April 15. Counter expected within 7 days.</span></div>
+    </div>
+  </div>
+
+  <div class="blocker sev-high">
+    <div class="blocker-header">
+      <span class="blocker-id">BLK-03</span>
+      <span class="blocker-title">St. Jude Patient Art Sourcing — No Protocol Established</span>
+      <span class="sev-badge sev-high">HIGH</span>
+    </div>
+    <div class="m-desc">Studio B's activation is anchored on patient art adapted into in-game gadget designs. This requires a formal protocol for sourcing patient artwork with explicit written permission for commercial monetization ("express permission to sell it in-game with money going back"). St. Jude has no documented protocol for this. Without it, the patient art component of the bundle cannot move to production.</div>
+    <div class="blocker-grid">
+      <div><span class="blocker-field">Response Deadline:</span></div>
+      <div><span class="blocker-val">May 15, 2026 (before M3 integration spec)</span></div>
+      <div><span class="blocker-field">Escalation Trigger:</span></div>
+      <div><span class="blocker-val">No protocol draft from St. Jude by May 1. Escalate to St. Jude legal and child life team for emergency protocol drafting. Studio B activation reduces to bundle-only (no patient art), lowering campaign narrative value.</span></div>
+      <div><span class="blocker-field">Next Action:</span></div>
+      <div><span class="blocker-val">FTR submits patient art protocol brief to St. Jude point of contact by April 14. Request assignment of internal owner.</span></div>
+    </div>
+  </div>
+
+  <div class="blocker sev-med">
+    <div class="blocker-header">
+      <span class="blocker-id">BLK-04</span>
+      <span class="blocker-title">St. Jude Points of Contact — Not Yet Named in SOW</span>
+      <span class="sev-badge sev-med">MEDIUM</span>
+    </div>
+    <div class="m-desc">SOW-001 requires named Company and Service Provider points of contact. St. Jude has not yet designated a named point of contact for campaign coordination, brand approvals, or legal. All approval timelines in the SOW depend on having a reachable named contact. Unsigned contact fields create downstream risk at every approval gate.</div>
+    <div class="blocker-grid">
+      <div><span class="blocker-field">Response Deadline:</span></div>
+      <div><span class="blocker-val">April 21, 2026</span></div>
+      <div><span class="blocker-field">Escalation Trigger:</span></div>
+      <div><span class="blocker-val">No named POC from St. Jude by April 21. Escalate to St. Jude executive sponsor. All approval clocks paused until contact is designated.</span></div>
+      <div><span class="blocker-field">Next Action:</span></div>
+      <div><span class="blocker-val">FTR sends formal POC designation request to St. Jude by April 10.</span></div>
+    </div>
+  </div>
+
+  <div class="blocker sev-med">
+    <div class="blocker-header">
+      <span class="blocker-id">BLK-05</span>
+      <span class="blocker-title">Studio B Community Contest Structure — Rules and Moderation Undefined</span>
+      <span class="sev-badge sev-med">MEDIUM</span>
+    </div>
+    <div class="m-desc">The community creation contest (gadget idea submissions from Studio B player community) has no defined rules, submission format, judging criteria, or moderation process. Contest must be designed, reviewed by St. Jude, and technically built into the Studio B platform before launch. This is on the critical path for M4.</div>
+    <div class="blocker-grid">
+      <div><span class="blocker-field">Response Deadline:</span></div>
+      <div><span class="blocker-val">June 1, 2026 (before M4 creative production)</span></div>
+      <div><span class="blocker-field">Escalation Trigger:</span></div>
+      <div><span class="blocker-val">No contest rules approved by June 1. Contest is dropped from Studio B activation scope. Bundle and IRL components proceed without community contest layer.</span></div>
+      <div><span class="blocker-field">Next Action:</span></div>
+      <div><span class="blocker-val">FTR drafts contest rules and moderation brief by May 1 for Studio B and St. Jude joint review.</span></div>
+    </div>
+  </div>
+
+  <div class="blocker sev-low">
+    <div class="blocker-header">
+      <span class="blocker-id">BLK-06</span>
+      <span class="blocker-title">Studio A IRL Hospital Visit — Logistics Not Confirmed</span>
+      <span class="sev-badge sev-low">LOW</span>
+    </div>
+    <div class="m-desc">Studio A has flagged a Red mascot IRL hospital visit and plush donation as part of the brand activation layer. This was noted as "pending logistics" in the written confirmation. Failure to lock logistics early risks the IRL component dropping from the campaign, reducing the press value of the Studio A activation.</div>
+    <div class="blocker-grid">
+      <div><span class="blocker-field">Response Deadline:</span></div>
+      <div><span class="blocker-val">July 1, 2026</span></div>
+      <div><span class="blocker-field">Escalation Trigger:</span></div>
+      <div><span class="blocker-val">No logistics confirmation by July 1. IRL component removed from Studio A scope. Digital and social components proceed unchanged.</span></div>
+      <div><span class="blocker-field">Next Action:</span></div>
+      <div><span class="blocker-val">FTR requests logistics lead designation from Studio A by May 1. St. Jude child life team must confirm hospital visit feasibility.</span></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- SECTION 4: READINESS SCORECARD -->
+<section>
+  <h2>4 — Launch Readiness Scorecard</h2>
+  <p style="font-size:12px; color:var(--dim); margin-bottom:20px;">Scored as of April 7, 2026. Go threshold is 80/100 per dimension by October 1, 2026. Current scores reflect status at reporting date, not projected scores at launch gate.</p>
+
+  <table class="scorecard">
+    <thead>
+      <tr>
+        <th>Dimension</th>
+        <th>Current Score</th>
+        <th>Go Threshold</th>
+        <th>Status</th>
+        <th>What Moves This Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1. Partner Commitment and Contracting</strong><br><span style="font-size:11px;color:var(--dim)">LOIs executed, revenue splits agreed, SOW incorporated</span></td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill fill-yellow" style="width:52%"></div></div>
+            <span class="score-num watch">52/100</span>
+          </div>
+        </td>
+        <td><span class="threshold">≥ 80/100 by May 30</span></td>
+        <td><span class="nogo">NO-GO</span></td>
+        <td style="font-size:12px;color:var(--dim)">Studio A LOI execution (+20). Studio C revenue split agreement (+20). Studio B LOI after Meta policy resolution (+8).</td>
+      </tr>
+      <tr>
+        <td><strong>2. Legal and Compliance Readiness</strong><br><span style="font-size:11px;color:var(--dim)">SOW signed, brand approval process active, patient art protocol established</span></td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill fill-red" style="width:30%"></div></div>
+            <span class="score-num nogo">30/100</span>
+          </div>
+        </td>
+        <td><span class="threshold">≥ 80/100 by June 30</span></td>
+        <td><span class="nogo">NO-GO</span></td>
+        <td style="font-size:12px;color:var(--dim)">SOW execution (+25). Named POC designation (+15). Patient art protocol approved (+20). Brand guidelines delivered to FTR (+10).</td>
+      </tr>
+      <tr>
+        <td><strong>3. Technical Integration Readiness</strong><br><span style="font-size:11px;color:var(--dim)">Donation flow architecture confirmed, in-game items buildable, revenue tracking instrumented</span></td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill fill-yellow" style="width:45%"></div></div>
+            <span class="score-num watch">45/100</span>
+          </div>
+        </td>
+        <td><span class="threshold">≥ 80/100 by September 1</span></td>
+        <td><span class="nogo">NO-GO</span></td>
+        <td style="font-size:12px;color:var(--dim)">Integration specs delivered to all three studios (+20). Studio B web bundle decision (+10). Revenue tracking confirmed with St. Jude finance (+15). Studio C Roblox charity flow verified (+10).</td>
+      </tr>
+      <tr>
+        <td><strong>4. Creative Asset and Brand Approval</strong><br><span style="font-size:11px;color:var(--dim)">Assets submitted, St. Jude written approval received, revision cycles complete</span></td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill fill-red" style="width:10%"></div></div>
+            <span class="score-num nogo">10/100</span>
+          </div>
+        </td>
+        <td><span class="threshold">≥ 100/100 by October 15</span></td>
+        <td><span class="nogo">NO-GO</span></td>
+        <td style="font-size:12px;color:var(--dim)">This dimension must reach 100 — partial approval is not a go condition. All assets submitted (+40). All approvals received in writing (+50). Zero pending revision requests (+10).</td>
+      </tr>
+      <tr>
+        <td><strong>5. Revenue Flow and Reporting Architecture</strong><br><span style="font-size:11px;color:var(--dim)">Gross Revenue definition operationalized, per-partner tracking confirmed, remittance path clear</span></td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill fill-yellow" style="width:55%"></div></div>
+            <span class="score-num watch">55/100</span>
+          </div>
+        </td>
+        <td><span class="threshold">≥ 80/100 by October 1</span></td>
+        <td><span class="nogo">NO-GO</span></td>
+        <td style="font-size:12px;color:var(--dim)">Per-partner revenue taxonomy documented per SOW-001 Section 3 (+15). Platform fee deduction methodology agreed with each studio (+15). Wire transfer details and remittance path confirmed with St. Jude finance (+15).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:20px; padding:14px 16px; border:1px solid var(--border); border-radius:2px; font-size:12px;">
+    <strong>Composite Go/No-Go:</strong> <span class="nogo">NO-GO AS OF APRIL 7, 2026.</span>
+    <span style="color:var(--dim); margin-left:8px;">All five dimensions are below go thresholds. This is expected at this phase — campaign is 7 months pre-launch. Composite go condition requires all five dimensions at or above threshold by October 1, 2026, with Dimension 4 (Creative Approval) at 100. Current trajectory is on track if BLK-01 through BLK-04 are resolved by their response deadlines.</span>
+  </div>
+</section>
+
+<!-- SECTION 5: HANDOFF TASKS -->
+<section>
+  <h2>5 — Bounded Handoff Tasks</h2>
+  <p style="font-size:12px; color:var(--dim); margin-bottom:20px;">Each task below is scoped for a contributor who has read this report and the framework documents. No renegotiation of existing terms is required. Each task has a clear input, defined output, and a hard deadline tied to the milestone timeline above.</p>
+
+  <div class="handoff-task">
+    <div class="task-id">HANDOFF-01 · Response deadline: April 21, 2026</div>
+    <div class="task-title">Meta Platform Policy Research: Web Bundle Eligibility for UEFN/VR Charity Activations</div>
+    <div class="task-desc">Studio B wants to sell a charity bundle ($10.99–$14.99, outfit + gadget + coins) directly via their website rather than through the Meta platform store, to avoid Meta's ~30% cut. The question is whether Meta's developer policies permit external web sales of items tied to a Meta platform VR experience, and whether a charity use case creates any policy exceptions or requires additional disclosures.</div>
+    <div class="task-inputs-label">Inputs available</div>
+    <div class="task-input-item">Studio B platform: Meta Quest / VR storefront</div>
+    <div class="task-input-item">Bundle contents: in-game outfit, gadget(s), in-platform coins</div>
+    <div class="task-input-item">Relevant Meta policy domains: Meta Quest Developer Policy, Meta Platform Terms, Monetization Policies</div>
+    <div class="task-input-item">Charity framing: proceeds to St. Jude Children's Research Hospital, publicly declared</div>
+    <div class="task-output">Output: Written policy summary (500–800 words) citing specific Meta policy sections. Conclusion: permitted / not permitted / requires Meta approval. Delivered to FTR Partnership Lead by April 21.</div>
+  </div>
+
+  <div class="handoff-task">
+    <div class="task-id">HANDOFF-02 · Response deadline: May 1, 2026</div>
+    <div class="task-title">Patient Art Monetization Protocol: Consent and Permission Framework for Studio B</div>
+    <div class="task-desc">Studio B's activation requires St. Jude patient artwork to be adapted into in-game gadget designs and sold as part of a real-money bundle. A documented protocol must exist covering: how patients (and guardians) provide informed consent, what "express permission to sell in-game" means legally, how proceeds are attributed back to St. Jude, and what disclosures are required in the game UI and marketing materials. This protocol must be reviewed by St. Jude legal before any patient art is solicited or used.</div>
+    <div class="task-inputs-label">Inputs available</div>
+    <div class="task-input-item">SOW-001 Section 1.6 (Physical Merchandise Consultation) and Section 4 (Brand Approval Process) as the contractual anchor</div>
+    <div class="task-input-item">Activation scope: patient doodles/art adapted into gadget designs, sold in $10.99–$14.99 bundle</div>
+    <div class="task-input-item">Revenue flow: Digital Goods sales, proceeds to St. Jude after FTR 12.5% commission</div>
+    <div class="task-input-item">Analogous frameworks: St. Jude's existing patient content use policies (request from St. Jude POC)</div>
+    <div class="task-output">Output: Protocol draft (800–1,200 words) covering consent process, permission language, attribution requirements, and required UI disclosures. Delivered to St. Jude legal and FTR by May 1 for joint review.</div>
+  </div>
+
+  <div class="handoff-task">
+    <div class="task-id">HANDOFF-03 · Response deadline: June 1, 2026</div>
+    <div class="task-title">Studio B Community Contest: Rules, Moderation, and Integration Specification</div>
+    <div class="task-desc">Studio B will run a community creation contest where players submit gadget ideas that may be selected for the patient-art-inspired in-game items. The contest must be fully specified before creative production begins at M4. The spec must cover: submission format, eligibility, judging criteria (combining community votes + St. Jude patient art team input), prize or recognition structure, content moderation rules, disqualification conditions, and technical integration requirements for the Studio B platform.</div>
+    <div class="task-inputs-label">Inputs available</div>
+    <div class="task-input-item">Studio B platform: VR, player-generated content ecosystem with established community moderation tools</div>
+    <div class="task-input-item">Patient art protocol (output of HANDOFF-02) — must be complete before this task begins</div>
+    <div class="task-input-item">SOW-001 Section 1.3 (Community Events) and Section 4 (Brand Approval) as the contractual scope</div>
+    <div class="task-input-item">Campaign window: Contest runs through November 2026; winning designs must be production-ready by September 1 for integration into M5 asset submission</div>
+    <div class="task-output">Output: Contest specification document (600–1,000 words) covering all above elements. Must be approved by Studio B technical lead and St. Jude POC before June 15. Delivered to FTR Partnership Lead for submission by June 1.</div>
+  </div>
+
+</section>
+
+<div style="border-top:1px solid var(--border); padding-top:24px; margin-top:16px;">
+  <div class="meta">
+    <span>Report produced: April 7, 2026</span>
+    <span>Framework: Gaming for Good Multi-Studio Coordination Framework, Q1 2026</span>
+    <span>SOW reference: SOW-001, St. Jude × FTR Agency</span>
+  </div>
+  <div style="margin-top:8px; font-size:11px; color:var(--dim)">All commitments are verbal as of report date unless noted. Studio labels are anonymized for network publication. This document does not constitute a binding agreement or modify any existing commercial terms.</div>
+</div>
+
+</body>
+</html>
